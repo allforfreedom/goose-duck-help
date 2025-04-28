@@ -2,40 +2,8 @@ const container = document.getElementById('backImg');
 const gridBox = document.querySelector('.grid-box');
 
 // 模板配置数据
-const TEMPLATES = {
-    '地下室': {
-        factions: [
-            {
-                type: 'good',
-                roles: ['好人', '肉汁', '通灵者', '正义使者', '警长', '加拿大鹅', '侦探', '观鸟者', '殡仪员', '网红', '复仇者', '星界行者', '工程师', '跟踪者', '生存主义者', '科学家', '说客', '士兵', '验尸官', '探测员', '恋人 鹅', '保镖']
-            },
-            {
-                type: 'neutral',
-                roles: ['中立', '呆呆鸟', '秃鹫', '鸽子', '猎鹰', '鹈鹕']
-            },
-            {
-                type: 'bad',
-                roles: ['坏人', '恋人 鸭', '雇佣杀手', '食鸟鸭', '静语者', '专业杀手', '间谍', '刺客', '派对狂', '爆炸王', '身份窃贼', '丧葬者', '隐形者', '连环杀手', '超能力者', '传教士', '小丑', '狙击手']
-            }
-        ]
-    },
-    '哥斯拉': {
-        factions: [
-            {
-                type: 'good',
-                roles: ['好人', '肉汁', '通灵者', '正义使者', '警长', '加拿大鹅', '侦探', '观鸟者', '网红', '复仇者', '星界行者', '跟踪者', '生存主义者', '科学家', '说客', '预言家', '士兵', '验尸官', '探测员', '恋人 鹅', '保镖']
-            },
-            {
-                type: 'neutral',
-                roles: ['中立', '呆呆鸟', '鸽子', '猎鹰', '鹈鹕', '老鹰']
-            },
-            {
-                type: 'bad',
-                roles: ['坏人', '恋人 鸭', '雇佣杀手', '食鸟鸭', '变形者', '静语者', '专业杀手', '间谍', '刺客', '派对狂', '爆炸王', '身份窃贼', '隐形者', '连环杀手', '超能力者', '传教士', '默剧演员', '小丑', '掠夺者', '狙击手']
-            }
-        ]
-    }
-};
+// 移除原有的TEMPLATES常量
+let TEMPLATES = {};
 
 // 创建单个下拉菜单
 function createSelect(roles, type) {
@@ -58,6 +26,10 @@ let gridItemTemplate = null; // 模板缓存
 
 // 创建网格项（使用模板优化）
 function createGridItem(templateName) {
+    if (!TEMPLATES[templateName]) {
+        console.error(`找不到模板: ${templateName}`);
+        return document.createElement('div');
+    }
     if (!gridItemTemplate) {
         const template = document.createElement('template');
         template.innerHTML = `
@@ -86,7 +58,7 @@ function createGridItem(templateName) {
 }
 
 // ================ 优化初始化函数 ================
-function initGrid(templateName = '地下室') {
+function initGrid(templateName = '通用模板') {
     // 使用文档片段和分批加载
     gridBox.innerHTML = '';
     const fragment = document.createDocumentFragment();
@@ -178,11 +150,18 @@ document.addEventListener('input', e => {
 
 // 监听模板切换
 document.getElementById('template-select').addEventListener('change', (e) => {
-    initGrid(e.target.value);
+    if (TEMPLATES[e.target.value]) {
+        initGrid(e.target.value);
+    }
 });
 
 // 初始化应用
-initGrid();
+// 在初始化时加载配置
+window.electronAPI.getTemplates().then(config => {
+    TEMPLATES = config;
+    initGrid(); // 初始化网格
+});
+
 
 // 图片功能
 window.electronAPI.setBackground((event, value) => {

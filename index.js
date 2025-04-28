@@ -1,5 +1,18 @@
-const { app, BrowserWindow, clipboard, Menu } = require('electron');
+const { app, BrowserWindow, clipboard, Menu, ipcMain } = require('electron');
 const path = require('path');
+const fs = require('fs');
+
+// 新增配置加载方法
+const loadTemplates = () => {
+    try {
+        const configPath = path.join(__dirname, 'config.json');
+        const rawData = fs.readFileSync(configPath);
+        return JSON.parse(rawData).templates;
+    } catch (error) {
+        console.error('加载配置文件失败:', error);
+        return {}; // 返回空配置防止崩溃
+    }
+};
 
 const createWindow = () => {
     const win = new BrowserWindow({
@@ -35,6 +48,9 @@ const createWindow = () => {
 
     Menu.setApplicationMenu(menu);
     win.loadFile('index.html');
+
+    // 添加模板获取处理
+    ipcMain.handle('get-templates', () => loadTemplates());
 };
 
 app.whenReady().then(createWindow);
