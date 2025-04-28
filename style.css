@@ -1,26 +1,153 @@
-.grid-box{
-    position: absolute;
-    /*background-color: aliceblue;*/
-    /*top: 200px;*/
-    display: flex;
-    flex-wrap: wrap;
-    z-index: 100;
-    top: 200px;
-    left:88px;
-    /*opacity: 0.3;*/
-}
-.squarer{
-    width: 366px;
-    height: 155px;
-    /*background: yellow;*/
+/* ===== 调整控件位置和大小 ===== */
+.squarer {
+    position: relative;
     background: rgba(0,0,0,0.1);
-    margin-left: 20px;
-    margin-top: 23px;
 }
 
-.select{
-    position: relative;
-    top: 50px;
-    left: 90px;
-    opacity: 0.7;
+/* 控件容器右移 */
+.controls {
+    position: absolute;
+    left: 122px;  /* 366px * 1/3 = 122px */
+    width: 257px;  /* 右侧2/3区域 */
+    top: 36px;
 }
+
+/* 缩小下拉框 */
+select {
+    width: 75px !important;  /* 原110px */
+    height: 22px !important;
+    font-size: 12px;
+}
+
+/* 缩小输入框 */
+input {
+    width: 67px !important;  /* 原100px */
+    height: 20px !important;
+    margin-right: 6px;
+    padding: 0 3px;
+    will-change: transform; /* 启用GPU加速 */
+    backface-visibility: hidden;
+}
+
+/* 颜色标识 */
+.good-select {
+    background: rgba(173,216,230,0.3);
+    border: 1px solid #add8e6;
+}
+.neutral-select {
+    background: rgba(255,228,181,0.3);
+    border: 1px solid #ffe4b5;
+}
+.bad-select {
+    background: rgba(240,128,128,0.3);
+    border: 1px solid #f08080;
+}
+
+/* 新增模板选择器样式 */
+#template-control {
+    position: absolute;
+    top: 20px;
+    left: 88px;
+    z-index: 300; /* 原200 */
+}
+
+#template-select {
+    width: 180px !important;
+    height: 28px !important;
+    border: 1px solid #6ab0d6;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+/* 保持原有其他样式不变 */
+.grid-box {
+    position: absolute;
+    display: grid;
+    grid-template-columns: repeat(4, 366px);
+    grid-auto-rows: 155px;
+    gap: 23px 20px;
+    z-index: 200; /* 原100 */
+    top: 200px;
+    left: 88px;
+    margin-bottom: 100px;  /* 减少底部间距 */
+    position: relative; /* 创建新的层叠上下文 */
+}
+
+
+/* 下拉框行样式 */
+.select-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px; /* 增加与输入框的间距 */
+}
+
+/* 输入框容器 */
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* 输入框行间距 */
+}
+
+/* 单个输入框行 */
+.input-single-row {
+    width: 66%;
+}
+
+.input-single-row input {
+    width: 100% !important;
+    height: 20px;
+    padding: 4px 8px;
+    border: 1px solid #add8e6;
+    border-radius: 4px;
+    box-sizing: border-box; /* 防止溢出 */
+}
+
+/* style.css */
+/* 新增序号输入区样式 */
+.number-input-container {
+    position: absolute;
+    top: 920px;  /* 上移160px */
+    left: 108px;
+    width: calc(366px * 4 + 20px * 3);
+    z-index: 250; /* 原90 */
+    background: rgba(255,255,255,0.9);
+}
+
+.input-row {
+    display: flex;
+    gap: 8px;
+    margin: 12px;
+}
+
+.input-item {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.number-label {
+    min-width: 28px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-right: 4px;
+    text-align: center;
+}
+
+.input-item input {
+    width: 100% !important;
+    height: 28px !important;
+    padding: 4px 8px;
+    border: 1px solid #add8e6;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+/* style.css 修改以下部分 */
+#backImg {
+    position: absolute; /* 添加定位 */
+    z-index: 50; /* 确保在底层 */
+    pointer-events: none; /* 允许穿透点击 */
+}
+
